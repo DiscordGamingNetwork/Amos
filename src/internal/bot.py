@@ -1,8 +1,10 @@
 from discord.ext import commands
-from discord import Intents, Message
+from discord import Intents, Message, Embed
 
 from loguru import logger
 from traceback import format_exc
+from datetime import datetime
+from os import getenv
 
 from .help import Help
 from .context import Context
@@ -63,3 +65,23 @@ class Bot(commands.Bot):
         """Log the connect event."""
 
         logger.info("Connected to Discord.")
+
+    async def on_ready(self):
+        await self.log(f"Connected to Discord as {self.user}")
+
+    async def log(self, message: str, title: str = "Logging", colour: int = 0x87CEEB):
+        embed = Embed(
+            title=title,
+            colour=colour,
+            description=message,
+            timestamp=datetime.utcnow(),
+        )
+
+        embed.set_footer(
+            text=str(self.user),
+            icon_url=str(self.user.avatar_url),
+        )
+
+        lc = self.get_channel(int(getenv("LOGS")))
+
+        await lc.send(embed=embed)
