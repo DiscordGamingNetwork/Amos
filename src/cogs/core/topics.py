@@ -1,5 +1,7 @@
-from discord import Embed
+from discord import Embed, File
 from discord.ext import commands
+
+from io import StringIO
 
 from src.internal.bot import Bot
 from src.internal.context import Context
@@ -74,6 +76,17 @@ class Topics(commands.Cog):
             return await ctx.reply("Not a valid topic.")
 
         await ctx.reply(f"ID: {topic['id']}\nCreated by: {ctx.guild.get_member(topic['author_id'])} ({topic['author_id']})\nData:```\n{topic['topic']}```")
+
+    @commands.command(name="lstopics")
+    @commands.check_any(commands.is_owner(), commands.has_role(337442104026595329))
+    async def list_topics(self, ctx: Context):
+        """List all topics."""
+
+        topics = await self.bot.db.get_topics()
+
+        data = "\n".join([f"{str(topic['id']).zfill(4)}: {topic['topic']}" for topic in topics])
+
+        await ctx.reply(f"There are a total of {len(topics)} topics:", file=File(StringIO(data), filename="topics.txt"))
 
 
 def setup(bot: Bot):

@@ -56,3 +56,6 @@ class Database:
 
     async def get_topic_by_id(self, id: int):
         return await self.fetchrow("SELECT * FROM Topics WHERE id = $1;", id)
+
+    async def get_topics(self):
+        return await self.fetch("SELECT * FROM Topics;")
