@@ -65,7 +65,7 @@ class Topics(commands.Cog):
 
     @commands.command(name="topicinfo")
     @commands.check_any(commands.is_owner(), commands.has_role(337442104026595329))
-    async def del_topic(self, ctx: Context, id: int):
+    async def topic_info(self, ctx: Context, id: int):
         """Get information about a topic."""
 
         topic = await self.bot.db.get_topic_by_id(id)
