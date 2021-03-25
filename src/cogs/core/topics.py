@@ -39,6 +39,7 @@ class Topics(commands.Cog):
 
     @commands.command(name="newtopic")
     @commands.cooldown(rate=1, per=600, type=commands.BucketType.member)
+    @commands.check_any(commands.is_owner(), commands.has_any_role(339445127917338635, 337442104026595329))
     @in_channel(264417177094848512, 737760236013748295)
     async def new_topic(self, ctx: Context, *, topic: str):
         """Create a new topic."""
