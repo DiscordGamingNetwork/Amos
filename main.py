@@ -11,6 +11,7 @@ bot = Bot()
 bot.load_extensions(
     "jishaku",
     "src.cogs.internal.error_handler",
+    "src.cogs.core.topics",
 )
 
 bot.run(getenv("TOKEN"))
