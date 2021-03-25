@@ -4,6 +4,7 @@ from discord import Intents, Message, Embed
 from loguru import logger
 from traceback import format_exc
 from datetime import datetime
+from aiohttp import ClientSession
 from os import getenv
 
 from .help import Help
@@ -29,6 +30,7 @@ class Bot(commands.Bot):
         )
 
         self.db: Database = Database()
+        self.sess: ClientSession = None
 
     def load_extensions(self, *exts) -> None:
         """Load a given set of extensions."""
@@ -53,6 +55,8 @@ class Bot(commands.Bot):
         logger.info("Logging in to Discord...")
 
         await self.db.setup()
+
+        self.sess = ClientSession()
 
         await super().login(*args, **kwargs)
 

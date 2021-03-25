@@ -56,6 +56,27 @@ class Topics(commands.Cog):
 
         await ctx.reply(f"Topic created! ID: {topic['id']}")
 
+    @commands.command(name="importtopics")
+    @commands.check_any(commands.is_owner(), commands.has_role(337442104026595329))
+    async def import_topics(self, ctx: Context):
+        """Import topics from a text file."""
+
+        if not ctx.message.attachments:
+            return await ctx.reply("You must attach a file for this.")
+
+        async with ctx.typing():
+            file = await self.bot.sess.get(ctx.message.attachments[0].url)
+            file = await file.text()
+
+            ids = []
+
+            for line in file.split("\n"):
+                if line:
+                    topic = await self.bot.db.create_topic(ctx.author.id, line)
+                    ids.append(topic['id'])
+
+            await ctx.reply(f"Successfully inserted {len(ids)} topics: " + ", ".join(str(id) for id in ids))
+
     @commands.command(name="deltopic")
     @commands.check_any(commands.is_owner(), commands.has_role(337442104026595329))
     async def del_topic(self, ctx: Context, id: int):
