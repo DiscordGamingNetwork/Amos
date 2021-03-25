@@ -75,7 +75,7 @@ class Topics(commands.Cog):
                     topic = await self.bot.db.create_topic(ctx.author.id, line)
                     ids.append(topic['id'])
 
-            await ctx.reply(f"Successfully inserted {len(ids)} topics: " + ", ".join(str(id) for id in ids))
+            await ctx.reply(f"Successfully inserted {len(ids)} topics")
 
     @commands.command(name="deltopic")
     @commands.check_any(commands.is_owner(), commands.has_role(337442104026595329))
