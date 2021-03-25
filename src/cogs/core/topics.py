@@ -14,7 +14,7 @@ class Topics(commands.Cog):
 
     @commands.command(name="topic")
     @commands.cooldown(rate=1, per=60, type=commands.BucketType.channel)
-    @in_channel(264417177094848512, 737760236013748295)
+    @in_channel(264417177094848512, 737760236013748295, 779479420481175554)
     async def get_topic(self, ctx: Context):
         """Get a topic to talk about."""
 
