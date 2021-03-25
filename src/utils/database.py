@@ -32,3 +32,27 @@ class Database:
     async def fetch(self, query: str, *args):
         async with self.pool.acquire() as conn:
             return await conn.fetch(query, *args)
+
+    async def create_user(self, id: int):
+        return await self.fetchrow("INSERT INTO Users (id) VALUES ($1) RETURNING *;", id)
+
+    async def fetch_user(self, id: int):
+        user = await self.fetchrow("SELECT * FROM Users WHERE id = $1;", id)
+
+        if user:
+            return user
+
+        return await self.create_user(id)
+
+    async def create_topic(self, author: int, data: str):
+        await self.fetch_user(author)
+        return await self.fetchrow("INSERT INTO Topics (author_id, topic) VALUES ($1, $2) RETURNING *;", author, data)
+
+    async def delete_topic(self, id: int):
+        await self.execute("DELETE FROM Topics WHERE id = $1;", id)
+
+    async def get_random_topic(self):
+        return await self.fetchrow("SELECT * FROM Topics ORDER BY RANDOM() LIMIT 1;")
+
+    async def get_topic_by_id(self, id: int):
+        return await self.fetchrow("SELECT * FROM Topics WHERE id = $1;", id)
