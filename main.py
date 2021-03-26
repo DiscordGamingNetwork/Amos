@@ -14,6 +14,7 @@ bot.load_extensions(
     "src.cogs.internal.ping",
     "src.cogs.internal.update",
     "src.cogs.core.topics",
+    "src.cogs.fun.ducks",
 )
 
 bot.run(getenv("TOKEN"))
