@@ -12,6 +12,7 @@ bot.load_extensions(
     "jishaku",
     "src.cogs.internal.error_handler",
     "src.cogs.internal.ping",
+    "src.cogs.internal.update",
     "src.cogs.core.topics",
 )
 
