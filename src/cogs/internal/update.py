@@ -1,6 +1,8 @@
 from discord import Embed
 from discord.ext import commands
 
+from os import system
+
 from src.internal.bot import Bot
 from src.internal.context import Context
 
@@ -22,7 +24,7 @@ class Update(commands.Cog):
             colour=0x87CEEB,
         ))
 
-        await ctx.invoke("jishaku", "sh", "./update.sh")
+        system("./update.sh")
 
 
 def setup(bot: Bot):
