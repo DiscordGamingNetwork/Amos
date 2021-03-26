@@ -13,6 +13,7 @@ bot.load_extensions(
     "src.cogs.internal.error_handler",
     "src.cogs.internal.ping",
     "src.cogs.internal.update",
+    "src.cogs.utility.bookmark",
     "src.cogs.core.topics",
     "src.cogs.fun.ducks",
 )
