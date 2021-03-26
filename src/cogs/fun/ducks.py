@@ -14,7 +14,7 @@ class Ducks(commands.Cog):
         self.bot = bot
 
     @commands.command(name="duckify")
-    @commands.cooldown(rate=1, per=60, type=commands.BucketType.member)
+    @commands.cooldown(rate=1, per=15, type=commands.BucketType.member)
     @in_channel(int(getenv("CHANNEL")))
     async def duckify(self, ctx: Context, unique: bool = False):
         """Get the duck version of yourself."""
