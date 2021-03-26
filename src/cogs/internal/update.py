@@ -40,7 +40,7 @@ class Update(commands.Cog):
         with p.open() as f:
             await self.bot.db.execute(f.read())
 
-        await ctx.reply(f"Successfully run migration: `{filename}`")
+        await ctx.reply(f"Successfully ran migration: `{filename}`")
 
 
 def setup(bot: Bot):
