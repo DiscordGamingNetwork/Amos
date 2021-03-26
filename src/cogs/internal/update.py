@@ -15,7 +15,7 @@ class Update(commands.Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.command(name="run")
+    @commands.group(name="run")
     @commands.is_owner()
     async def run(self, ctx: Context):
         pass
