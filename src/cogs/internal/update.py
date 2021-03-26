@@ -21,7 +21,7 @@ class Update(commands.Cog):
         pass
 
     @run.command(name="update")
-    async def ping(self, ctx: Context):
+    async def update(self, ctx: Context):
         """Update the bot."""
 
         await ctx.reply(embed=Embed(
@@ -30,6 +30,19 @@ class Update(commands.Cog):
         ))
 
         system("./update.sh")
+
+    @run.command(name="pull")
+    async def pull(self, ctx: Context):
+        """Update the bot."""
+
+        await ctx.reply(embed=Embed(
+            title="Pulling from git...",
+            colour=0x87CEEB,
+        ))
+
+        system("git pull origin master")
+
+        await ctx.message.add_reaction("👌")
 
     @run.command(name="migrate")
     async def migrate(self, ctx: Context, filename: str):
