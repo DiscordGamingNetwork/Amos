@@ -1,11 +1,20 @@
-from discord import Embed, File
+from discord import Embed, File, Reaction, Member, Message
 from discord.ext import commands
 
 from io import StringIO
+from collections import namedtuple
+from time import time
 
 from src.internal.bot import Bot
 from src.internal.context import Context
 from src.internal.checks import in_channel
+
+
+class TopicMessage:
+    def __init__(self, message: Message):
+        self.msg = message
+        self.time = time()
+        self.users = set()
 
 
 class Topics(commands.Cog):
@@ -13,6 +22,25 @@ class Topics(commands.Cog):
 
     def __init__(self, bot: Bot):
         self.bot = bot
+
+        self.messages = None
+
+    async def gen_topic(self):
+        topic = await self.bot.db.get_random_topic()
+
+        embed = Embed(
+            description=topic["topic"],
+            colour=0x87CEEB,
+            timestamp=topic["created_at"],
+        )
+
+        user = self.bot.get_user(topic["author_id"])
+
+        embed.set_footer(
+            text=f"From: {user if user else 'unknown'} • ID: {topic['id']} • Created:"
+        )
+
+        return embed
 
     @commands.command(name="topic")
     @commands.cooldown(rate=1, per=60, type=commands.BucketType.channel)
@@ -23,21 +51,13 @@ class Topics(commands.Cog):
         if await self.bot.is_owner(ctx.author):
             ctx.command.reset_cooldown(ctx)
 
-        topic = await self.bot.db.get_random_topic()
+        embed = await self.gen_topic()
 
-        embed = Embed(
-            description=topic["topic"],
-            colour=0x87CEEB,
-            timestamp=topic["created_at"],
-        )
+        msg = await ctx.reply(embed=embed)
 
-        user = ctx.guild.get_member(topic["author_id"])
+        await msg.add_reaction("🔁")
 
-        embed.set_footer(
-            text=f"From: {user if user else 'unknown'} • ID: {topic['id']} • Created:"
-        )
-
-        await ctx.reply(embed=embed)
+        self.message = TopicMessage(msg)
 
     @commands.command(name="newtopic")
     @commands.cooldown(rate=1, per=600, type=commands.BucketType.member)
@@ -108,6 +128,31 @@ class Topics(commands.Cog):
         data = "\n".join([f"{str(topic['id']).zfill(4)}: {topic['topic']}" for topic in topics])
 
         await ctx.reply(f"There are a total of {len(topics)} topics:", file=File(StringIO(data), filename="topics.txt"))
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction: Reaction, member: Member):
+        """Allows for refreshing the topic."""
+
+        if not isinstance(member, Member):
+            return
+
+        if member == self.bot.user:
+            return
+
+        if not self.message:
+            return
+
+        if self.message.msg.id != reaction.message.id:
+            return
+
+        if self.message.time + 30 < time():
+            return
+
+        self.message.users.add(member.id)
+
+        if len(self.message.users) >= 4:
+            await self.message.msg.edit(embed=await self.gen_topic())
+            self.message = None
 
 
 def setup(bot: Bot):
