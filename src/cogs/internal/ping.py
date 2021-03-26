@@ -43,7 +43,7 @@ class Topics(commands.Cog):
         embed.add_field(name="API Edit", value=f"{medit.time}ms", inline=True)
         embed.add_field(name="API Delete", value=f"{msdel.time}ms", inline=True)
 
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
 
 
 def setup(bot: Bot):
