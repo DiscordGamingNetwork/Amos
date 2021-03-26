@@ -59,3 +59,19 @@ class Database:
 
     async def get_topics(self):
         return await self.fetch("SELECT * FROM Topics;")
+
+    async def create_trivia_question(self, author: int, data: str, answers: str):
+        await self.fetch_user(author)
+        return await self.fetchrow("INSERT INTO TriviaQuestions (author_id, question, answers) VALUES ($1, $2, $3) RETURNING *;", author, data, answers)
+
+    async def delete_trivia_question(self, id: int):
+        await self.execute("DELETE FROM TriviaQuestions WHERE id = $1;", id)
+
+    async def get_random_trivia_question(self):
+        return await self.fetchrow("SELECT * FROM TriviaQuestions ORDER BY RANDOM() LIMIT 1;")
+
+    async def get_trivia_question_by_id(self, id: int):
+        return await self.fetchrow("SELECT * FROM TriviaQuestions WHERE id = $1;", id)
+
+    async def get_trivia_questions(self):
+        return await self.fetch("SELECT * FROM TriviaQuestions;")
