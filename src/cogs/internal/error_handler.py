@@ -40,6 +40,9 @@ class ErrorHandler(commands.Cog):
     async def on_command_error(self, ctx: Context, error: CommandError):
         """Handle command errors."""
 
+        if await self.bot.is_owner(ctx.author):
+            ctx.command.reset_cooldown(ctx)
+
         command = ctx.command
 
         if isinstance(error, errors.CommandNotFound):
@@ -108,6 +111,13 @@ class ErrorHandler(commands.Cog):
             )
         elif isinstance(e, errors.NoPrivateMessage):
             await ctx.send(e)
+
+    @commands.Cog.listener()
+    async def on_command_completion(self, ctx: Context):
+        """Reset cooldowns for bot owners on command completion."""
+
+        if await self.bot.is_owner(ctx.author):
+            ctx.command.reset_cooldown(ctx)
 
 
 def setup(bot: Bot):

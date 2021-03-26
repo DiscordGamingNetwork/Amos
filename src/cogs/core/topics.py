@@ -48,9 +48,6 @@ class Topics(commands.Cog):
     async def get_topic(self, ctx: Context):
         """Get a topic to talk about."""
 
-        if await self.bot.is_owner(ctx.author):
-            ctx.command.reset_cooldown(ctx)
-
         embed = await self.gen_topic()
 
         msg = await ctx.reply(embed=embed)
@@ -65,9 +62,6 @@ class Topics(commands.Cog):
     @in_channel(264417177094848512, 737760236013748295)
     async def new_topic(self, ctx: Context, *, topic: str):
         """Create a new topic."""
-
-        if await self.bot.is_owner(ctx.author):
-            ctx.command.reset_cooldown(ctx)
 
         if len(topic) > 200:
             return await ctx.reply("Topics must be 200 characters or less.")
