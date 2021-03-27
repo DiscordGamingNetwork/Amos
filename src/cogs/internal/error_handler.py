@@ -40,9 +40,6 @@ class ErrorHandler(commands.Cog):
     async def on_command_error(self, ctx: Context, error: CommandError):
         """Handle command errors."""
 
-        if await self.bot.is_owner(ctx.author):
-            ctx.command.reset_cooldown(ctx)
-
         command = ctx.command
 
         if isinstance(error, errors.CommandNotFound):
@@ -58,6 +55,9 @@ class ErrorHandler(commands.Cog):
         else:
             embed = self.get_embed("Unexpected internal error", f"```py\n{error}\n```")
             await ctx.send(embed=embed)
+
+        if await self.bot.is_owner(ctx.author):
+            ctx.command.reset_cooldown(ctx)
 
         logger.warning(f"Error in command {command} invoked by {ctx.message.author}\n{error.__class__.__name__}: {error}")
 
