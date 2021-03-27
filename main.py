@@ -16,6 +16,7 @@ bot.load_extensions(
     "src.cogs.utility.bookmark",
     "src.cogs.core.topics",
     "src.cogs.fun.ducks",
+    "src.cogs.fun.misc",
 )
 
 bot.run(getenv("TOKEN"))
