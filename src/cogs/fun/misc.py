@@ -28,6 +28,9 @@ class Misc(commands.Cog):
 
         message = await fetch(message, ctx)
 
+        if not message:
+            return await ctx.reply("I couldn't find that message.")
+
         if not message.content:
             return await ctx.reply("Message has no content, and can't be bookmarked.")
 
