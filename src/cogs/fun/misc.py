@@ -61,7 +61,7 @@ class Misc(commands.Cog):
     @in_channel(int(getenv("CHANNEL")))
     async def dadjoke(self, ctx: Context):
         """Fetch a random dadjoke from [icanhazdadjoke](https://icanhazdadjoke.com)."""
-        resp = await self.bot.sess.get("icanhazdadjoke.com", headers={"Accept": "application/json"})
+        resp = await self.bot.sess.get("https://icanhazdadjoke.com", headers={"Accept": "application/json"})
         res = await resp.json()
         await ctx.send(f"Here is your dadjoke, {ctx.author.mention}!\n{res['joke']}")
     
