@@ -2,6 +2,9 @@ from discord import Embed
 from discord.ext import commands
 
 from os import getenv
+
+from discord.ext.commands.cooldowns import BucketType
+from discord.ext.commands.core import command
 from pyowo import owo
 
 from src.internal.bot import Bot
@@ -52,6 +55,17 @@ class Misc(commands.Cog):
         )
 
         await ctx.reply(embed=embed)
+    
+    @commands.command(name="dadjoke", aliases="dj")
+    @commands.cooldown(rate=1, per=5, type=commands.BucketType.member)
+    @in_channel(int(getenv("CHANNEL")))
+    async def dadjoke(self, ctx: Context):
+        """Fetch a random dadjoke from [icanhazdadjoke](https://icanhazdadjoke.com)."""
+        resp = await self.bot.sess.get("https://icanhazdadjoke.com", headers={"Accept": "application/json"})
+        res = await resp.json()
+        await ctx.send(f"Here is your dadjoke, {ctx.author.mention}!\n{res['joke']}")
+    
+
 
 
 def setup(bot: Bot):
