@@ -32,7 +32,7 @@ class Misc(commands.Cog):
             return
 
         if not message.content:
-            return await ctx.reply("Message has no content, and can't be bookmarked.")
+            return await ctx.reply("Message has no content, and can't be owoified.")
 
         embed = Embed(
             title="OwO'd Message",
