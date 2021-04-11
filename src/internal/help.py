@@ -151,7 +151,7 @@ class Help(HelpCommand):
 
     async def send_cog_help(self, cog: commands.Cog):
         embed = discord.Embed(
-            title=f"Help for the `{cog.qualified_name}` catagory.", colour=0x87CEEB
+            title=f"Help for the `{cog.qualified_name}` category.", colour=0x87CEEB
         )
         for command in cog.get_commands():
             embed.add_field(
