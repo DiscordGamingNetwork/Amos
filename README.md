@@ -1,6 +1,6 @@
 # DiscordGamingNetwork/Amos
 
-## A bot for the GTA Online Discord server
+A bot for the GTA Online Discord server
 
 ### Setting up the bot for development
 
